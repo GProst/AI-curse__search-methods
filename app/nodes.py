@@ -1,5 +1,7 @@
 from params import goal_state, n, state_length, search_type
 
+visited_nodes_states_collection = set()
+
 
 class _NodesExpanded:
     __expanded = []

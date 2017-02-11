@@ -1,6 +1,5 @@
 from .fringe import Fringe
 from params import init_state
-from states_collections import states_collection
 from nodes import successor_node, current_node
 
 
@@ -18,7 +17,6 @@ class _BFSFringe(Fringe):
         on added it to the list
         """
         self._fringe.append((init_state, -1, -1, 0))
-        states_collection.add(init_state)  # adding initial state to our states collection
 
     def enqueue(self):
         self._common_actions_before_adding_new_node()
@@ -27,9 +25,10 @@ class _BFSFringe(Fringe):
                              successor_node.move, successor_node.depth_level))
 
     def dequeue(self):
-        self._size -= 1
+        next_node = self._fringe.pop(0)
+        self._common_actions_after_removing_node(next_node[0])
         # when we remove node from fringe, we actually make it current node in search
-        current_node.update(self._fringe.pop(0))
+        current_node.update(next_node)
 
 
 bfs_fringe = _BFSFringe()

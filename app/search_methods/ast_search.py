@@ -1,5 +1,4 @@
-from nodes import current_node, successor_node
-from states_collections import states_collection, fringe_states_collection
+from nodes import current_node, successor_node, visited_nodes_states_collection
 from fringe.ast_fringe import ast_fringe
 
 
@@ -49,13 +48,13 @@ def __try_add_right_node_to_fringe():
 
 
 def __not_visited():
-    if successor_node.state not in states_collection:
+    if successor_node.state not in visited_nodes_states_collection:
         successor_node.count_manhattan_value()
         return True
 
 
 def __not_duplicate_with_higher_value():
-    if successor_node.state in fringe_states_collection:
+    if successor_node.state in ast_fringe.states_collection:
         duplicate_node_index, duplicate_node = ast_fringe.find_duplicate()
         """
         we are comparing only depth_level(g(n)), because we know that h(n) of duplicate nodes are

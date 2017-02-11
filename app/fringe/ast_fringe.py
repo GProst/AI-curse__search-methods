@@ -1,6 +1,5 @@
 from .fringe import Fringe
 from params import init_state
-from states_collections import states_collection
 from nodes import successor_node, current_node
 
 
@@ -22,7 +21,6 @@ class _ASTFringe(Fringe):
         in a moment.
         """
         self._fringe.append((init_state, -1, -1, 0, None))
-        states_collection.add(init_state)  # adding initial state to our states collection
 
     def enqueue(self):
         self._common_actions_before_adding_new_node()
@@ -31,10 +29,11 @@ class _ASTFringe(Fringe):
                              successor_node.move, successor_node.depth_level, successor_node.value))
 
     def delete_min(self):
-        self._size -= 1
+        next_node_index = self._fringe.index(min(self._fringe, key=lambda node: node[4]))
+        next_node = self._fringe.pop(next_node_index)
+        self._common_actions_after_removing_node(next_node[0])
         # when we remove node from fringe, we actually make it current node in search
-        current_node_index = self._fringe.index(min(self._fringe, key=lambda node: node[4]))
-        current_node.update(self._fringe.pop(current_node_index))
+        current_node.update(next_node)
 
     def find_duplicate(self):
         state_to_search = successor_node.state
