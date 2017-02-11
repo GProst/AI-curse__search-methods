@@ -1,6 +1,6 @@
 from .fringe import Fringe
 from params import init_state
-from nodes import successor_node, current_node
+from nodes import successor_node, current_node, remove_redundant_nodes_from_expanded_nodes_list
 
 
 class _DFSFringe(Fringe):
@@ -27,6 +27,8 @@ class _DFSFringe(Fringe):
     def pop(self):
         next_node = self._fringe.pop(0)
         self._common_actions_after_removing_node(next_node[0])
+        if current_node.is_a_leaf:
+            remove_redundant_nodes_from_expanded_nodes_list(next_node[1])
         # when we remove node from fringe, we actually make it current node in search
         current_node.update(next_node)
 

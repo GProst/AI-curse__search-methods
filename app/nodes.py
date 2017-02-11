@@ -3,24 +3,24 @@ from params import goal_state, n, state_length, search_type
 visited_nodes_states_collection = set()
 
 
-class _NodesExpanded:
-    __expanded = []
+class _NodesExpanded(object):
+    list = []
     __length = 0
 
     def append(self, node):
-        self.__expanded.append(node)
+        self.list.append(node)
         self.__length += 1
 
     @property
     def length(self):
         return self.__length
 
-    @property
-    def list(self):
-        return self.__expanded
-
 
 nodes_expanded = _NodesExpanded()
+
+
+def remove_redundant_nodes_from_expanded_nodes_list(parent_node_index):  # dfs/dls only
+    del nodes_expanded.list[parent_node_index + 1:]
 
 
 class _Node:
@@ -139,6 +139,12 @@ class _SuccessorNode(_Node):
         self.parent_index_in_list_of_expanded_nodes = nodes_expanded.length
 
 
+class _DFSCurrentNode(_CurrentNode):
+    def __init__(self):
+        _CurrentNode.__init__(self)
+        self.is_a_leaf = False
+
+
 class _ASTNode:
     def __init__(self):
         self.value = None
@@ -165,7 +171,7 @@ class _ASTSuccessorNode(_ASTNode, _SuccessorNode):
 
 current_node = {
     'bfs': _CurrentNode,
-    'dfs': _CurrentNode,
+    'dfs': _DFSCurrentNode,
     'ast': _ASTCurrentNode
 }.get(search_type)()
 

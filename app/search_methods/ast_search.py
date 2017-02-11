@@ -9,6 +9,7 @@ def ast_search():
             return True
         else:
             __expand_node()
+    return False
 
 
 def __expand_node():
