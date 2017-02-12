@@ -8,7 +8,7 @@ class _ASTFringe(Fringe):
         Fringe.__init__(self)
         """
         Node format is a tuple, which equals to:
-        (node_state, parent_index_in_list_of_expanded_nodes, move, depth_level, value).
+        (node_state, parent_index_in_list_of_expanded_nodes, move, depth_level, f_value).
         `move` is a move which leaded to this node from its parent.
         `move` is an integer with possible values of 0,1,2,3
         which corresponds to 'Up', 'Down', 'Left', 'Right'.
@@ -16,9 +16,9 @@ class _ASTFringe(Fringe):
         because initial node doesn't have a parent and there were was no allowed moves
         on added it to the list
         `depth_level` is actually g(n)
-        `value` is h(n), Manhattan priority function value of `state`. For initial node it is
-        equal to None, because it doesn't matter as we are gonna mark this node as expanded
-        in a moment.
+        `f_value` is f(n) = g(n) + h(n), where h(n) is Manhattan priority function value of `state`.
+        For initial node it is equal to None, because it doesn't matter as we are gonna mark this
+        node as expanded in a moment.
         """
         self._fringe.append((init_state, -1, -1, 0, None))
 
@@ -38,8 +38,8 @@ class _ASTFringe(Fringe):
     def find_duplicate(self):
         state_to_search = successor_node.state
         for index, node in self._fringe:
-            if node.state == state_to_search:
-                return index, node
+            if node[0] == state_to_search:
+                return index, node[3], node[4]
 
     def remove_duplicate_node(self, duplicate_node_index):
         self._fringe.pop(duplicate_node_index)

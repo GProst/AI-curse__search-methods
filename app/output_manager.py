@@ -4,6 +4,7 @@ from params import search_type
 from fringe.bfs_fringe import bfs_fringe
 from fringe.dfs_fringe import dfs_fringe
 from fringe.ast_fringe import ast_fringe
+from fringe.ida_fringe import ida_fringe
 from nodes import nodes_expanded, current_node as goal_node
 
 search_time = {
@@ -14,7 +15,8 @@ search_time = {
 fringe = {
     'bfs': bfs_fringe,
     'dfs': dfs_fringe,
-    'ast': ast_fringe
+    'ast': ast_fringe,
+    'ida': ida_fringe
 }.get(search_type)
 
 

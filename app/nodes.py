@@ -5,15 +5,11 @@ visited_nodes_states_collection = set()
 
 class _NodesExpanded(object):
     list = []
-    __length = 0
+    length = 0
 
     def append(self, node):
         self.list.append(node)
-        self.__length += 1
-
-    @property
-    def length(self):
-        return self.__length
+        self.length += 1
 
 
 nodes_expanded = _NodesExpanded()
@@ -172,11 +168,13 @@ class _ASTSuccessorNode(_ASTNode, _SuccessorNode):
 current_node = {
     'bfs': _CurrentNode,
     'dfs': _DFSCurrentNode,
-    'ast': _ASTCurrentNode
+    'ast': _ASTCurrentNode,
+    'ida': _DFSCurrentNode
 }.get(search_type)()
 
 successor_node = {
     'bfs': _SuccessorNode,
     'dfs': _SuccessorNode,
-    'ast': _ASTSuccessorNode
+    'ast': _ASTSuccessorNode,
+    'ida': _ASTSuccessorNode
 }.get(search_type)()
