@@ -27,6 +27,8 @@ def __try_add_upper_node_to_fringe():
                         successor_node.state not in visited_nodes_states_collection:
             dfs_fringe.push()
             return False
+        else:
+            return True
     return True
 
 
@@ -37,6 +39,8 @@ def __try_add_lower_node_to_fringe():
                         successor_node.state not in visited_nodes_states_collection:
             dfs_fringe.push()
             return False
+        else:
+            return True
     return True
 
 
@@ -47,6 +51,8 @@ def __try_add_left_node_to_fringe():
                         successor_node.state not in visited_nodes_states_collection:
             dfs_fringe.push()
             return False
+        else:
+            return True
     return True
 
 
@@ -57,4 +63,6 @@ def __try_add_right_node_to_fringe():
                         successor_node.state not in visited_nodes_states_collection:
             dfs_fringe.push()
             return False
+        else:
+            return True
     return True

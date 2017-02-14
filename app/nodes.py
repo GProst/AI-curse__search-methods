@@ -127,12 +127,8 @@ class _SuccessorNode(_Node):
 
     def __create_common_properties(self):
         self.depth_level = current_node.depth_level + 1
-        """
-        Parent of next successor nodes will be the last one which we added
-        to the list of extended nodes. That's why we can increase index
-        of next successor nodes by 1 beforehand.
-        """
-        self.parent_index_in_list_of_expanded_nodes = nodes_expanded.length
+        self.parent_index_in_list_of_expanded_nodes = \
+            current_node.parent_index_in_list_of_expanded_nodes + 1
 
 
 class _DFSCurrentNode(_CurrentNode):
