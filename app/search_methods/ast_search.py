@@ -23,33 +23,42 @@ def __expand_node():
 def __try_add_upper_node_to_fringe():
     if current_node.has_top_successor():
         successor_node.transform_into_top_successor()
-        if __in_fringe_with_bigger_value() or __not_visited():
+        if (__not_in_fringe_and_not_visited()) or __in_fringe_with_bigger_value():
             ast_fringe.enqueue()
 
 
 def __try_add_lower_node_to_fringe():
     if current_node.has_bottom_successor():
         successor_node.transform_into_bottom_successor()
-        if __in_fringe_with_bigger_value() or __not_visited():
+        if (__not_in_fringe_and_not_visited()) or __in_fringe_with_bigger_value():
             ast_fringe.enqueue()
 
 
 def __try_add_left_node_to_fringe():
     if current_node.has_left_successor():
         successor_node.transform_into_left_successor()
-        if __in_fringe_with_bigger_value() or __not_visited():
+        if (__not_in_fringe_and_not_visited()) or __in_fringe_with_bigger_value():
             ast_fringe.enqueue()
 
 
 def __try_add_right_node_to_fringe():
     if current_node.has_right_successor():
         successor_node.transform_into_right_successor()
-        if __in_fringe_with_bigger_value() or __not_visited():
+        if (__not_in_fringe_and_not_visited()) or __in_fringe_with_bigger_value():
             ast_fringe.enqueue()
 
 
+def __not_in_fringe_and_not_visited():
+    if successor_node.state not in ast_fringe.states_collection and \
+                    successor_node.state not in visited_nodes_states_collection:
+        successor_node.count_manhattan_value()
+        return True
+    else:
+        return False
+
+
 def __in_fringe_with_bigger_value():  # if node is already in the fringe, but with bigger value
-    if successor_node.state in ast_fringe.states_collection:
+    if __in_fringe():
         duplicate_node_index, duplicate_node_depth_level, \
         duplicate_node_value = ast_fringe.find_duplicate()
         """
@@ -57,7 +66,8 @@ def __in_fringe_with_bigger_value():  # if node is already in the fringe, but wi
         equal
         """
         if successor_node.depth_level < duplicate_node_depth_level:
-            successor_node.value = duplicate_node_value
+            successor_node.value = duplicate_node_value - duplicate_node_depth_level \
+                                   + successor_node.depth_level
             ast_fringe.remove_duplicate_node(duplicate_node_index)
             return True
         else:
@@ -66,7 +76,5 @@ def __in_fringe_with_bigger_value():  # if node is already in the fringe, but wi
         return False
 
 
-def __not_visited():
-    if successor_node.state not in visited_nodes_states_collection:
-        successor_node.count_manhattan_value()
-        return True
+def __in_fringe():
+    return successor_node.state in ast_fringe.states_collection

@@ -37,7 +37,7 @@ class _ASTFringe(Fringe):
 
     def find_duplicate(self):
         state_to_search = successor_node.state
-        for index, node in self._fringe:
+        for index, node in enumerate(self._fringe):
             if node[0] == state_to_search:
                 return index, node[3], node[4]
 
