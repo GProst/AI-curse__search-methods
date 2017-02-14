@@ -81,7 +81,7 @@ class _SuccessorNode(_Node):
         self.parent_index_in_list_of_expanded_nodes = 0
 
     def transform_into_top_successor(self):
-        self.__create_common_properties()
+        self._create_common_properties()
         self.position_of_0_in_state = current_node.position_of_0_in_state - n
         number_to_switch = current_node.state[self.position_of_0_in_state]
         self.state = current_node.state[:self.position_of_0_in_state] \
@@ -94,7 +94,7 @@ class _SuccessorNode(_Node):
         self.move = 0
 
     def transform_into_bottom_successor(self):
-        self.__create_common_properties()
+        self._create_common_properties()
         self.position_of_0_in_state = current_node.position_of_0_in_state + n
         number_to_switch = current_node.state[self.position_of_0_in_state]
         self.state = current_node.state[:current_node.position_of_0_in_state] \
@@ -108,7 +108,7 @@ class _SuccessorNode(_Node):
         self.move = 1
 
     def transform_into_left_successor(self):
-        self.__create_common_properties()
+        self._create_common_properties()
         self.position_of_0_in_state = current_node.position_of_0_in_state - 1
         number_to_switch = current_node.state[self.position_of_0_in_state]
         self.state = current_node.state[:self.position_of_0_in_state] \
@@ -117,7 +117,7 @@ class _SuccessorNode(_Node):
         self.move = 2
 
     def transform_into_right_successor(self):
-        self.__create_common_properties()
+        self._create_common_properties()
         self.position_of_0_in_state = current_node.position_of_0_in_state + 1
         number_to_switch = current_node.state[self.position_of_0_in_state]
         self.state = current_node.state[:current_node.position_of_0_in_state] \
@@ -125,7 +125,21 @@ class _SuccessorNode(_Node):
                      + current_node.state[self.position_of_0_in_state + 1:]
         self.move = 3
 
-    def __create_common_properties(self):
+    def _create_common_properties(self):
+        self.depth_level = current_node.depth_level + 1
+        """
+        Parent of next successor nodes will be the last one which we added
+        to the list of extended nodes. That's why we can increase index
+        of next successor nodes by 1 beforehand.
+        """
+        self.parent_index_in_list_of_expanded_nodes = nodes_expanded.length
+
+
+class _DFSSuccessorNode(_SuccessorNode):
+    def __init__(self):
+        _SuccessorNode.__init__(self)
+
+    def _create_common_properties(self):
         self.depth_level = current_node.depth_level + 1
         self.parent_index_in_list_of_expanded_nodes = \
             current_node.parent_index_in_list_of_expanded_nodes + 1
@@ -154,11 +168,24 @@ class _ASTSuccessorNode(_ASTNode, _SuccessorNode):
         _SuccessorNode.__init__(self)
 
     def count_manhattan_value(self):
-        state = self.state
-        value = 0
-        for i in range(0, n - 1):
-            value += state.index(i) - i
-        self.value = self.depth_level + value  # g(n) + h(n)
+        _count_manhattan_value(self)
+
+
+class _IDASuccessorNode(_ASTNode, _DFSSuccessorNode):
+    def __init__(self):
+        _ASTNode.__init__(self)
+        _DFSSuccessorNode.__init__(self)
+
+    def count_manhattan_value(self):
+        _count_manhattan_value(self)
+
+
+def _count_manhattan_value(node):
+    state = node.state
+    value = 0
+    for i in range(0, n - 1):
+        value += state.index(i) - i
+    node.value = node.depth_level + value  # g(n) + h(n)
 
 
 current_node = {
@@ -170,7 +197,7 @@ current_node = {
 
 successor_node = {
     'bfs': _SuccessorNode,
-    'dfs': _SuccessorNode,
+    'dfs': _DFSSuccessorNode,
     'ast': _ASTSuccessorNode,
-    'ida': _ASTSuccessorNode
+    'ida': _IDASuccessorNode
 }.get(search_type)()
